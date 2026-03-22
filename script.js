@@ -140,6 +140,41 @@
       });
     })();
 
+    /**
+     * Open image overlay only after full-res image is ready, so scale(0→1) animates at final size
+     * (avoids thumbnail-then-swap jump from grid inline/base64 previews).
+     */
+    function openFullImageOverlay(overlay, content, overlayImage, fullSrc) {
+      content.style.left = '';
+      content.style.top = '';
+      content.classList.remove('overlay-content-open');
+
+      function reveal() {
+        overlay.classList.add('visible');
+        document.body.classList.add('overlay-open');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => content.classList.add('overlay-content-open'));
+        });
+      }
+
+      function afterDimensionsReady() {
+        if (typeof overlayImage.decode === 'function') {
+          overlayImage.decode().then(reveal).catch(reveal);
+        } else {
+          reveal();
+        }
+      }
+
+      overlayImage.src = fullSrc;
+
+      if (overlayImage.complete) {
+        afterDimensionsReady();
+      } else {
+        overlayImage.addEventListener('load', afterDimensionsReady, { once: true });
+        overlayImage.addEventListener('error', reveal, { once: true });
+      }
+    }
+
     // Dedicated overlay for Me-1.png
     (function () {
       const overlay = document.getElementById('me1Overlay');
@@ -152,20 +187,7 @@
       if (me1Item && me1ItemImg) {
         me1Item.addEventListener('click', () => {
           const fullSrc = new URL('assets/me-1_full.png', window.location.href).href;
-          overlayImage.src = me1ItemImg.src;
-          const probe = new Image();
-          probe.onload = function () {
-            overlayImage.src = fullSrc;
-          };
-          probe.src = fullSrc;
-          content.style.left = '';
-          content.style.top = '';
-          content.classList.remove('overlay-content-open');
-          overlay.classList.add('visible');
-          document.body.classList.add('overlay-open');
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => content.classList.add('overlay-content-open'));
-          });
+          openFullImageOverlay(overlay, content, overlayImage, fullSrc);
         });
       }
 
@@ -210,20 +232,7 @@
       if (me2Item && me2ItemImg) {
         me2Item.addEventListener('click', () => {
           const fullSrc = new URL('assets/me-2_full.png', window.location.href).href;
-          overlayImage.src = me2ItemImg.src;
-          const probe = new Image();
-          probe.onload = function () {
-            overlayImage.src = fullSrc;
-          };
-          probe.src = fullSrc;
-          content.style.left = '';
-          content.style.top = '';
-          content.classList.remove('overlay-content-open');
-          overlay.classList.add('visible');
-          document.body.classList.add('overlay-open');
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => content.classList.add('overlay-content-open'));
-          });
+          openFullImageOverlay(overlay, content, overlayImage, fullSrc);
         });
       }
 
@@ -268,20 +277,7 @@
       if (millerItem && millerItemImg) {
         millerItem.addEventListener('click', () => {
           const fullSrc = new URL('assets/miller_full.png', window.location.href).href;
-          overlayImage.src = millerItemImg.src;
-          const probe = new Image();
-          probe.onload = function () {
-            overlayImage.src = fullSrc;
-          };
-          probe.src = fullSrc;
-          content.style.left = '';
-          content.style.top = '';
-          content.classList.remove('overlay-content-open');
-          overlay.classList.add('visible');
-          document.body.classList.add('overlay-open');
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => content.classList.add('overlay-content-open'));
-          });
+          openFullImageOverlay(overlay, content, overlayImage, fullSrc);
         });
       }
 
