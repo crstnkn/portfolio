@@ -12,6 +12,10 @@
 
       /* Fluid gutter: 26px @ 390px → 70px @ 1728px */
       --gutter: clamp(26px, 0.9821rem + 3.2886vw, 70px);
+
+      /* Home grid: About.txt SVG is 175×219 — photo icons use this same footprint */
+      --grid-doc-icon-w: clamp(75px, 3.1390rem + 6.3528vw, 136px);
+      --grid-doc-icon-h: calc(var(--grid-doc-icon-w) * 219 / 175);
     }
 
     /* ─── Reset ──────────────────────────────────────────────────────── */
@@ -1081,7 +1085,8 @@
       display: grid;
       grid-template-columns: repeat(var(--columns), 1fr);
       column-gap: var(--gutter);
-      align-items: end;
+      /* Stretch row height to tallest item, then .grid-item uses flex-end to sit icon+label on bottom */
+      align-items: stretch;
       row-gap: clamp(60px, 2.6570rem + 4.4843vw, 120px);
     }
 
@@ -1091,6 +1096,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-end;
+      /* Space between icon and label (margin collapse doesn’t apply in flex; gap is consistent for every item) */
+      gap: clamp(25px, 1.1071rem + 1.8685vw, 50px);
+      min-height: 0;
       text-decoration: none;
       opacity: 1;
       transform: translateY(100vh);
@@ -1426,7 +1435,7 @@
 
     /* ─── Item icon ──────────────────────────────────────────────────── */
     .item-icon {
-      width: clamp(75px, 3.1390rem + 6.3528vw, 136px);
+      width: var(--grid-doc-icon-w);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1443,18 +1452,29 @@
       z-index: -1;
     }
 
+    /* About.txt + Resume.pdf: same icon cell height as .item-icon--photo (Me-1 / Me-2 / Miller) */
+    .item-icon:not(.item-icon--folder):not(.item-icon--photo) {
+      /* Column flex: basis locks main-axis size so SVG vs absolute img cells match */
+      flex: 0 0 var(--grid-doc-icon-h);
+      height: var(--grid-doc-icon-h);
+      align-items: flex-end; /* sit SVG on bottom of cell; matches photo anchored to bottom */
+      justify-content: center;
+    }
+
     .item-icon svg {
       width: 100%;
       height: auto;
+      max-height: 100%;
       filter: drop-shadow(0px 8px 7px rgba(0, 0, 0, 0.25));
     }
 
     /* ─── Item label ────────────────────────────────────────────────── */
     .item-label {
       width: 100%;
-      margin-top: clamp(25px, 1.1071rem + 1.8685vw, 50px);
+      margin-top: 0;
       text-align: center;
       display: block;
+      flex-shrink: 0;
     }
 
     .item-label-inner {
@@ -1479,24 +1499,48 @@
       z-index: -1;
     }
 
-    /* ─── Photo icon ────────────────────────────────────────────────── */
+    /* ─── Photo icon (Me-1 / Me-2 / Miller): same box as About.txt (175×219 SVG) ─ */
     .item-icon--photo {
-      width: clamp(100px, 4.1550rem + 8.5949vw, 182.75px);
+      width: var(--grid-doc-icon-w);
+      flex: 0 0 var(--grid-doc-icon-h);
+      height: var(--grid-doc-icon-h);
+      /* Parent .item-icon uses align-items: center — img won’t stretch; fill via absolute layer */
+      align-items: stretch;
+      justify-content: stretch;
     }
 
-    .item-photo {
-      width: 100%;
-      height: auto;
+    .item-icon--photo .item-photo {
       display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      object-fit: contain;
+      object-position: center;
+      z-index: 0;
       filter: drop-shadow(0px 8px 7px rgba(0, 0, 0, 0.25));
+    }
+
+    /*
+      Me-1 / Me-2: identical sizing — cover + center (same as each other; Miller keeps default contain above).
+      max-width/max-height: none so replaced-element caps never shrink these below the absolute 100%×100% box.
+    */
+    .item-icon--photo img[alt="Me-1"].item-photo,
+    .item-icon--photo img[alt="Me-2"].item-photo {
+      object-fit: cover;
+      object-position: center;
+      max-width: none;
+      max-height: none;
     }
 
     /* ─── Folder icon ───────────────────────────────────────────────── */
     .item-icon--folder {
       width: clamp(100px, 4.1550rem + 8.5949vw, 182.75px);
+      flex: 0 0 auto;
     }
 
-    /* ─── Me-2 photo size ───────────────────────────────────────────── */
+    /* Optional narrower variant (home grid photos use .item-icon--photo = About.txt size) */
     .item-icon--photo-sm {
       width: clamp(75px, 2.9568rem + 7.1001vw, 144.5px);
     }

@@ -186,7 +186,7 @@
       const me1Item = me1ItemImg ? me1ItemImg.closest('.grid-item') : null;
       if (me1Item && me1ItemImg) {
         me1Item.addEventListener('click', () => {
-          const fullSrc = new URL('assets/me-1_full.png', window.location.href).href;
+          const fullSrc = new URL('assets/me-1_alt.png', window.location.href).href;
           openFullImageOverlay(overlay, content, overlayImage, fullSrc);
         });
       }
