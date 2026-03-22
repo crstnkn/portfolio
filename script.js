@@ -842,6 +842,19 @@
           void animateCloseDrawerToHome();
         }
       });
+
+      document.addEventListener(
+        'touchend',
+        (e) => {
+          if (!document.body.classList.contains('proj-drawer-open')) return;
+          const touch = e.changedTouches && e.changedTouches[0];
+          if (!touch || touch.clientY >= 50) return;
+          const panel = document.querySelector('.proj-drawer-panel.proj-drawer-panel--open');
+          if (!panel) return;
+          panel.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        { passive: true }
+      );
     })();
 
     // Next → project links: same drawer animation as nav / grid (home + drawer), or index handoff from standalone
