@@ -1704,6 +1704,22 @@
     }
 
     @media (max-width: 600px) {
+      :root {
+        --margin: 30px;
+      }
+
+      .site-header {
+        top: 20px;
+      }
+
+      .nav-dropdown {
+        top: 60px;
+      }
+
+      .page-content {
+        padding-top: calc(200px * 0.8 - 15px);
+      }
+
       .grid-item {
         grid-column: span 3;
       }
