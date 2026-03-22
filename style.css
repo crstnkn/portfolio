@@ -1723,4 +1723,8 @@
       .grid-item {
         grid-column: span 3;
       }
+
+      .layout {
+        overflow: clip;
+      }
     }
