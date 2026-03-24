@@ -1675,6 +1675,10 @@
       opacity: 1;
     }
 
+    @media (hover: none) {
+      body::before { display: none; }
+    }
+
     /* ─── Grid Overlay ───────────────────────────────────────────────── */
     .grid-overlay {
       position: fixed;
