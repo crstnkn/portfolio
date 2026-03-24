@@ -334,7 +334,6 @@
       }
       projItems.forEach(item => {
         item.addEventListener('mouseenter', () => {
-          if (window.matchMedia('(hover: none)').matches) return;
           document.body.classList.remove('mirror-video-fallback');
           document.body.classList.add(item.dataset.bodyClass);
           const video = hoverVideos[item.dataset.bodyClass];
@@ -349,7 +348,6 @@
           }
         });
         item.addEventListener('mouseleave', () => {
-          if (window.matchMedia('(hover: none)').matches) return;
           const video = hoverVideos[item.dataset.bodyClass];
           if (video) video.pause();
           document.body.classList.remove(item.dataset.bodyClass, 'mirror-video-fallback');
