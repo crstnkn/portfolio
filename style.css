@@ -1545,15 +1545,13 @@
       width: clamp(75px, 2.9568rem + 7.1001vw, 144.5px);
     }
 
-    /* ─── Grid item hover (pointer devices only — avoids fake :hover on touch) ─ */
-    @media (hover: hover) and (pointer: fine) {
-      .grid-item:hover .item-icon::before {
-        background: #EEEEEA;
-      }
+    /* ─── Grid item hover ───────────────────────────────────────────── */
+    .grid-item:hover .item-icon::before {
+      background: #EEEEEA;
+    }
 
-      .grid-item:hover .item-label-inner::before {
-        background: #EEEEEA;
-      }
+    .grid-item:hover .item-label-inner::before {
+      background: #EEEEEA;
     }
 
     /* ─── Page bg hover ─────────────────────────────────────────────── */
