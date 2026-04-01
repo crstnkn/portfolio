@@ -3,6 +3,11 @@
          mobile  — 390px viewport,  30px margin, 26px gutter
          desktop — 1728px viewport, 100px margin, 70px gutter
     ─────────────────────────────────────────────────────────────────────── */
+
+    .proj-drawer-loading {
+      visibility: hidden;
+    }
+    
     :root {
       --max-width: 1728px;
       --columns:   6;
